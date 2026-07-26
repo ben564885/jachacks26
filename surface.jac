@@ -27,11 +27,16 @@ obj Resolution {
 }
 
 obj EscalationSurface {
-    def ask(escalation: Escalation) -> Resolution abs;
+    # Abstract by convention rather than by `abs`: the marker is not accepted by
+    # every jaclang this has to run on, and a body that refuses is portable and
+    # says the same thing. Every implementation below overrides it.
+    def ask(escalation: Escalation) -> Resolution {
+        raise NotImplementedError("EscalationSurface.ask is implemented by the surface in use.");
+    }
 }
 
 obj TerminalSurface(EscalationSurface) {
-    override def ask(escalation: Escalation) -> Resolution {
+    def ask(escalation: Escalation) -> Resolution {
         print(f"\n--- ESCALATION {escalation.conflict_id} (for {escalation.dev_id}) ---");
         print(f"file: {escalation.file}");
         print(escalation.title);
@@ -54,7 +59,7 @@ fixed side instead of blocking on stdin."""
 obj ScriptedSurface(EscalationSurface) {
     has answers: dict[str, str];  # conflict_id -> "green" | "red" | "other"
 
-    override def ask(escalation: Escalation) -> Resolution {
+    def ask(escalation: Escalation) -> Resolution {
         choice = self.answers.get(escalation.conflict_id, "green");
         print(f"\n--- ESCALATION {escalation.conflict_id} (for {escalation.dev_id}) ---");
         print(escalation.title);
