@@ -43,3 +43,20 @@ import from push { Push, PushOutcome, SubmitPush, Status }
 # --- the escalation surface seam and the two by llm() judgments ---
 import from surface { EscalationSurface, ScriptedSurface, Escalation as ScriptedEscalation, Resolution }
 import from judgment { Verdict }
+
+# --- the browser surface: the same loop as the notch, for a machine that
+#     isn't a Mac. The client's `sv import` registers these itself, but the
+#     board is also worth having as plain REST, so it is imported here too.
+import from board {
+    seed_board, board_state, run_scenario, answer_question, reset_board,
+    BoardState, RunResult, ConceptView, PendingView, PendingQuestion, AsksAbout
+}
+
+
+cl {
+    import from .components.Board { Board }
+
+    def:pub app() -> JsxElement {
+        return <Board />;
+    }
+}

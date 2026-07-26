@@ -24,7 +24,8 @@ start at `/graph`. the machine sleeps when idle, so the first request takes ~15s
 
 | | |
 | --- | --- |
-| `*.jac`, `main.jac` | the system, in [jac](https://www.jaseci.org) — graph schema, walkers, the integration agent, github i/o, the cli, and the websocket the notch reads. 26 modules at the repo root, because `main.jac` is the entry point. see [docs/jac.md](docs/jac.md) |
+| `*.jac`, `main.jac` | the system, in [jac](https://www.jaseci.org) — graph schema, walkers, the integration agent, github i/o, the cli, and the websocket the notch reads. at the repo root, because `main.jac` is the entry point. see [docs/jac.md](docs/jac.md) |
+| `components/` | the web board (`.cl.jac`) — the notch's loop in a browser, so the demo runs on a machine that isn't a mac. served at `/` |
 | `notch/` | the macos escalation surface (swift, `LSUIElement`). see [notch/README.md](notch/README.md) |
 | `landing/` | the marketing site (next.js). see [landing/README.md](landing/README.md) |
 
@@ -51,6 +52,13 @@ cd landing && npm install && npm run dev
 `make help` lists the rest — `make cli`, `make demo` (needs `OPENAI_API_KEY`), `make deploy`.
 
 ## the demo
+
+open `/` and work down the buttons: seed the graph, push `pricing.js`, answer the question it
+raises, then push `billing_test.js` — a different file that reaches the same `FreeTier` concept
+and answers itself off the decision you just made. needs `OPENAI_API_KEY` in the environment;
+without it the board still seeds and traverses, and says so where the verdict would be.
+
+the same thing in a terminal:
 
 ```bash
 make demo
