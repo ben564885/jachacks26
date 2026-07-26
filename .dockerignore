@@ -1,0 +1,16 @@
+# The image is the Jac server only. The .jac modules and jac.toml sit at the
+# repo root, so `COPY . .` would otherwise pull in the macOS app and the
+# Next.js site -- neither of which the server imports.
+notch/
+landing/
+docs/
+Makefile
+README.md
+
+Dockerfile
+fly.toml
+.git/
+.jacvenv/
+.jac/
+*.jir
+.DS_Store

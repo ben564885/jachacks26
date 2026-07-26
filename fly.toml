@@ -1,0 +1,30 @@
+app = "synqit-jac"
+primary_region = "sjc"
+
+[build]
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  # One machine on purpose. The graph persists to SQLite under .jac/data inside
+  # the machine, so a second machine would answer reads from its own private
+  # copy of the graph -- write on one, read nothing on the other. Going wider
+  # means MONGODB_URI (+ Redis), not more machines.
+  min_machines_running = 1
+
+  # If the process dies anyway, Fly notices in 15s instead of at demo time.
+  [[http_service.checks]]
+    interval = "15s"
+    timeout = "5s"
+    grace_period = "90s"
+    method = "GET"
+    path = "/healthz"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  # Boot compiles the .jac modules and initialises LLVM; that peaks high enough
+  # that 512mb and 1gb both OOM-killed the process mid-startup (410MB and
+  # 875MB RSS respectively, in a reboot loop). 2gb clears it.
+  memory = "2gb"

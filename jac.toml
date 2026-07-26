@@ -1,0 +1,24 @@
+[project]
+name = "synqit-jac"
+version = "0.1.0"
+description = "Synqit in Jac: the codebase as a graph, escalation as a walk over it"
+entry-point = "main.jac"
+kind = "api-service"
+
+# Pinned to exactly what the Dockerfile installs. jac-scale is what turns
+# `jac start` from bare walker RPC into a service: @restspec routes (which is
+# what notchsocket.jac's WebSocket is built on), Swagger at /docs, /healthz
+# probes, the /graph visualizer, the admin portal, and webhooks.
+#
+# jaclang is deliberately NOT listed here. It is the host runtime, not a
+# project dependency: a managed host supplies its own, and asking to install a
+# second one fails the whole dependency step -- which takes byllm down with it
+# and leaves `import from byllm.llm` unresolvable. The Dockerfile installs
+# jaclang==0.16.7 because there it *is* the host.
+[dependencies]
+byllm = "==0.6.19"
+jac-scale = "==0.2.31"
+requests = ">=2.31.0"
+
+[plugins.scale.server]
+suppress_health_check_logs = true
